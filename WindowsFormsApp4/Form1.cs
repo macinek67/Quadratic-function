@@ -43,7 +43,6 @@ namespace WindowsFormsApp4
             pen1.Width = 1.0f;
             g.DrawLine(pen1, 0, pictureBox1.Height / 2, pictureBox1.Width, pictureBox1.Height / 2);
             g.DrawLine(pen1, pictureBox1.Width / 2, 0, pictureBox1.Width / 2, pictureBox1.Height);
-
             for (int i = 1; i < p.positions.Count(); i++)
             {
                 pen1 = new Pen(brush: Brushes.Black);
@@ -69,14 +68,15 @@ namespace WindowsFormsApp4
         {
             if ((textBox1.Text != "" && textBox2.Text != "") && (!textBox1.Text.Contains(".") && !textBox2.Text.Contains(".")))
             {
+                if (A == -99) { A = float.Parse(textBox1.Text); label2.Text = A.ToString(); }
+                else if (B == -99) { B = float.Parse(textBox1.Text); label4.Text = B.ToString(); }
+                else return;
                 Pen pen2 = new Pen(brush: Brushes.Blue);
                 pen2.Width = 2.5f;
                 float Ux = pictureBox1.Width / 2;
                 float Uy = pictureBox1.Height / 2;
                 g.DrawEllipse(pen2, (skala * 9 * float.Parse(textBox1.Text) + Ux) - 2, Uy - (float.Parse(textBox2.Text) * 9 * skala) - 2, 4, 4);
                 pen2.Dispose();
-                if (A == -99) { A = float.Parse(textBox1.Text); label2.Text = A.ToString(); } 
-                else { B = float.Parse(textBox1.Text); label4.Text = B.ToString(); }
             }
         }
 
@@ -95,6 +95,9 @@ namespace WindowsFormsApp4
             g.Clear(Color.White);
             A = -99;
             B = -99;
+            label2.Text = A.ToString();
+            label4.Text = B.ToString();
+            label6.Text = "-99";
         }
 
         private void button3_Click(object sender, EventArgs e)
@@ -103,7 +106,7 @@ namespace WindowsFormsApp4
         }
 
         float S = -99;
-        float Fa, Fb, Fs;
+        float Fa, Fs;
         public float Ff(float x) { return (x * x)-3; }
 
         private void button4_Click(object sender, EventArgs e)
@@ -118,17 +121,21 @@ namespace WindowsFormsApp4
                 penS.Width = 2.5f;
                 float Ux = pictureBox1.Width / 2;
                 float Uy = pictureBox1.Height / 2;
-                g.DrawEllipse(pen, (skala * 9 * A + Ux) - 5, Uy - (0 * 9 * skala) - 2, 4, 4);
+                int m = 0;
+                if (skala == 1 || skala == 2) m = 3;
+                if (A < 0) g.DrawEllipse(pen, (skala * 9 * A + Ux) - (skala * 2) - 2, Uy - (0 * 9 * skala) - 2, 4, 4);
+                else g.DrawEllipse(pen, (skala * 9 * A + Ux) + skala / 2 - m, Uy - (0 * 9 * skala) - 2, 4, 4);
                 label2.Text = A.ToString();
-                g.DrawEllipse(pen, (skala * 9 * B + Ux) - 5, Uy - (0 * 9 * skala) - 2, 4, 4);
+                if (B < 0) g.DrawEllipse(pen, (skala * 9 * B + Ux) - (skala * 2) - 2, Uy - (0 * 9 * skala) - 2, 4, 4);
+                else g.DrawEllipse(pen, (skala * 9 * B + Ux) + skala / 2 - m, Uy - (0 * 9 * skala) - 2, 4, 4);
                 label4.Text = B.ToString();
                 S = (A + B) / 2;
                 Fa = Ff(A);
-                Fb = Ff(B);
                 Fs = Ff(S);
                 if (Fs < 0 && Fa < 0) A = S;
                 else B = S;
-                g.DrawEllipse(penS, (skala * 9 * S + Ux) - 5, Uy - (0 * 9 * skala) - 2, 4, 4);
+                if (S < 0) g.DrawEllipse(penS, (skala * 9 * S + Ux) - (skala * 2) - 2, Uy - (0 * 9 * skala) - 2, 4, 4);
+                else g.DrawEllipse(penS, (skala * 9 * B + Ux) + skala / 2 - m, Uy - (0 * 9 * skala) - 2, 4, 4);
                 label6.Text = S.ToString();
                 pen.Dispose();
             }
